@@ -13,8 +13,8 @@ var settings = {
 		movespeed: 4
 	},
 	ball: {
-		speed: null,
-		max_speed: null,
+        start_speed: new Vector2D(2.02, 2.02),
+        max_speed: new Vector2D(8.02, 8.02),
 		increase_speed: 1.001,
 		color: "green"
 	},

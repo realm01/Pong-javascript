@@ -44,7 +44,7 @@ function CalcWallCollision() {
 	if(ball.vect.y <= ball.radius || ball.vect.y == Number.POSITIVE_INFINITY) {
 		ball.speed.y *= -1;
 		if(ball.vect.y != Number.POSITIVE_INFINITY) {
-			ball.vect.y += (ball.radius - ball.vect.y) + POS_CORR;
+			ball.vect.y += 2 * ((ball.radius - ball.vect.y) + POS_CORR);
 		}else{
 			ball.vect.y = ball.radius + POS_CORR;
 		}
@@ -52,7 +52,7 @@ function CalcWallCollision() {
 	if(ball.vect.y >= cv.height - ball.radius || ball.vect.y == Number.NEGATIVE_INFINITY) {
 		ball.speed.y *= -1;
 		if(ball.vect.y != Number.NEGATIVE_INFINITY) {
-			ball.vect.y -= ((cv.height - ball.radius) - ball.vect.y) + POS_CORR;
+			ball.vect.y -= 2 * ((ball.vect.y - cv.height) + ball.radius + POS_CORR);
 		}else{
 			ball.vect.y = (cv.height - ball.radius) + POS_CORR;
 		}
@@ -60,18 +60,18 @@ function CalcWallCollision() {
 }
 
 function CalcPlayerCollision() {
-	if((ball.vect.x <= ball.radius + settings.slayer.x || ball.vect.x == Number.NEGATIVE_INFINITY) && ball.vect.y - players[PL_LEFT].vect.y <= settings.slayer.y) {
+	if((ball.vect.x <= ball.radius + settings.slayer.x || ball.vect.x == Number.NEGATIVE_INFINITY) && ball.vect.y - players[PL_LEFT].vect.y <= settings.slayer.y && ball.vect.y - players[PL_LEFT].vect.y >= 0) {
 		ball.speed.x *= -1;
 		if(ball.vect.x != Number.NEGATIVE_INFINITY) {
-			ball.vect.x += ((ball.radius + settings.slayer.x) - ball.vect.x) + POS_CORR;
+			ball.vect.x += 2 * (((ball.radius + settings.slayer.x) - ball.vect.x) + POS_CORR);
 		}else{
 			ball.vect.x = ball.radius + settings.slayer.x + POS_CORR;
 		}
 	}
-	if((ball.vect.x >= cv.width - ball.radius - settings.slayer.x || ball.vect.x == Number.POSITIVE_INFINITY) && ball.vect.y - players[PL_RIGHT].vect.y <= settings.slayer.y) {
+	if((ball.vect.x >= cv.width - ball.radius - settings.slayer.x || ball.vect.x == Number.POSITIVE_INFINITY) && ball.vect.y - players[PL_RIGHT].vect.y <= settings.slayer.y && ball.vect.y - players[PL_RIGHT].vect.y >= 0) {
 		ball.speed.x *= -1;
 		if(ball.vect.x != Number.POSITIVE_INFINITY) {
-			ball.vect.x -= ((cv.width - (ball.radius + settings.slayer.x)) - ball.vect.x) + POS_CORR;
+			ball.vect.x -= 2 * ((ball.vect.x - cv.width) + ball.radius + settings.slayer.x + POS_CORR);
 		}else{
 			ball.vect.x = (cv.width - (ball.radius + settings.slayer.x)) + POS_CORR;
 		}
@@ -87,8 +87,8 @@ function IncreaseBallSpeed() {
 	}
 	if(ball.speed.y < Math.abs(settings.ball.max_speed.y)) {
 		ball.speed.y *= settings.ball.increase_speed;
-		if(Math.abs(ball.speed.x) > settings.ball.max_speed.x) {
-			ball.speed.x = settings.ball.max_speed.x * (ball.speed.x / Math.abs(ball.speed.x));
+		if(Math.abs(ball.speed.y) > settings.ball.max_speed.y) {
+			ball.speed.y = settings.ball.max_speed.y * (ball.speed.y / Math.abs(ball.speed.y));
 		}
 	}
 }

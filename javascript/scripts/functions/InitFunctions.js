@@ -22,9 +22,7 @@ function InitPlayers() {
 
 function InitBall() {
 	ball = null;
-	settings.ball.speed = new Vector2D(1.01, 2.01);
-	settings.ball.max_speed = new Vector2D(3.01, 3.01);
-	ball = new Ball(new Vector2D(cv.width / 2, cv.height / 2), 20, settings.ball.speed, settings.ball.color);
+	ball = new Ball(new Vector2D(cv.width / 2, cv.height / 2), 20, new Vector2D(settings.ball.start_speed.x, settings.ball.start_speed.y), settings.ball.color);
 }
 
 function InitNewRound() {
