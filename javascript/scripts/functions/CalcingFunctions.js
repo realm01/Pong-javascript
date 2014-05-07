@@ -1,28 +1,47 @@
 function CalcMove(players, ball) {
 	if(settings.controls.pl_right.up.pressed && players[PL_RIGHT].vect.y < cv.height - settings.slayer.y) {
-        players[PL_RIGHT].vect.y += players[PL_RIGHT].speed;
+        players[PL_RIGHT].vect.y += players[PL_RIGHT].speed * settings.frames.frame_delta_time;
 	}
 	if(settings.controls.pl_right.down.pressed && players[PL_RIGHT].vect.y > 0) {
-        players[PL_RIGHT].vect.y -= players[PL_RIGHT].speed;
+        players[PL_RIGHT].vect.y -= players[PL_RIGHT].speed * settings.frames.frame_delta_time;
 	}
 	if(settings.controls.pl_left.up.pressed && players[PL_LEFT].vect.y < cv.height - settings.slayer.y) {
-        players[PL_LEFT].vect.y += players[PL_LEFT].speed;
+        players[PL_LEFT].vect.y += players[PL_LEFT].speed * settings.frames.frame_delta_time;
 	}
 	if(settings.controls.pl_left.down.pressed && players[PL_LEFT].vect.y > 0) {
-        players[PL_LEFT].vect.y -= players[PL_LEFT].speed;
+        players[PL_LEFT].vect.y -= players[PL_LEFT].speed * settings.frames.frame_delta_time;
 	}
 	CalcPlayerCollision();
 	CalcWallCollision();
     IncreasePlayerSpeed();
 	IncreaseBallSpeed();
-	ball.vect = VectorAddition(ball.vect, ball.speed);
+	ball.vect = VectorAddition(ball.vect, new Vector2D(ball.speed.x * settings.frames.frame_delta_time, ball.speed.y * settings.frames.frame_delta_time));
 }
 
 function CalcFrame() {
+    if(settings.debug.debugging) {
+        if(settings.debug.show_frame_informations) {
+            if(!settings.text.frame_informations) {
+                settings.text.frame_informations = new Text("fps: " + 1000 / (settings.frames.frame_delta_time * 1000) + " fps_time: " + settings.frames.frame_delta_time * 1000 + " ms", cv.width / 2 - 48, cv.height - 18, "12px", "Calibri", "purple");
+            }else{
+                settings.text.frame_informations.text = "fps: " + 1000 / (settings.frames.frame_delta_time * 1000) + " fps_time: " + settings.frames.frame_delta_time * 1000 + " ms";
+            }
+        }
+    }else{
+        if(settings.text.frame_informations) {
+            delete(settings.text.frame_informations);
+        }
+    }
 	if(!settings.paused) {
 		CalcMove(players, ball);
 	}
 	DrawFrame(players, ball);
+    settings.frames.frame_time_end = new Date();
+    var frame_delta_time = Math.abs(settings.frames.frame_time_start.getMilliseconds() - settings.frames.frame_time_end.getMilliseconds()) / 1000;
+    if(frame_delta_time < 0.900) {
+        settings.frames.frame_delta_time = frame_delta_time;
+    }
+    settings.frames.frame_time_start = new Date();
 }
 
 function VectorAddition(vect0, vect1) {
@@ -81,13 +100,13 @@ function CalcPlayerCollision() {
 
 function IncreaseBallSpeed() {
 	if(ball.speed.x < Math.abs(settings.ball.max_speed.x)) {
-		ball.speed.x *= settings.ball.increase_speed;
+		ball.speed.x += (settings.ball.increase_speed * settings.frames.frame_delta_time) * (ball.speed.x / Math.abs(ball.speed.x));
 		if(Math.abs(ball.speed.x) > settings.ball.max_speed.x) {
 			ball.speed.x = settings.ball.max_speed.x * (ball.speed.x / Math.abs(ball.speed.x));
 		}
 	}
 	if(ball.speed.y < Math.abs(settings.ball.max_speed.y)) {
-		ball.speed.y *= settings.ball.increase_speed;
+		ball.speed.y += (settings.ball.increase_speed * settings.frames.frame_delta_time) * (ball.speed.y / Math.abs(ball.speed.y));
 		if(Math.abs(ball.speed.y) > settings.ball.max_speed.y) {
 			ball.speed.y = settings.ball.max_speed.y * (ball.speed.y / Math.abs(ball.speed.y));
 		}
@@ -95,6 +114,6 @@ function IncreaseBallSpeed() {
 }
 
 function IncreasePlayerSpeed() {
-    players[PL_RIGHT].speed *= settings.slayer.increase_speed;
-    players[PL_LEFT].speed *= settings.slayer.increase_speed;
+    players[PL_RIGHT].speed += (settings.slayer.increase_speed * settings.frames.frame_delta_time) * (players[PL_RIGHT].speed / Math.abs(players[PL_RIGHT].speed));
+    players[PL_LEFT].speed += (settings.slayer.increase_speed * settings.frames.frame_delta_time) * (players[PL_LEFT].speed / Math.abs(players[PL_LEFT].speed));
 }
