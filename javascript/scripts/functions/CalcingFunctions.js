@@ -117,3 +117,7 @@ function IncreasePlayerSpeed() {
     players[PL_RIGHT].speed += (settings.slayer.increase_speed * settings.frames.frame_delta_time) * (players[PL_RIGHT].speed / Math.abs(players[PL_RIGHT].speed));
     players[PL_LEFT].speed += (settings.slayer.increase_speed * settings.frames.frame_delta_time) * (players[PL_LEFT].speed / Math.abs(players[PL_LEFT].speed));
 }
+
+function CalcRandomNumber(min, max) {
+    return Math.random() * (max - min) + min;
+}

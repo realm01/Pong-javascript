@@ -16,19 +16,27 @@ function Init() {
 
 function InitPlayers() {
 	players = new Array(2);
-	players[PL_LEFT] = new Slayer(new Vector2D(0, settings.slayer.y), settings.slayer.start_speed, settings.slayer.color, 0);
-	players[PL_RIGHT] = new Slayer(new Vector2D(cv.width - settings.slayer.x, settings.slayer.y), settings.slayer.start_speed, settings.slayer.color, 0);
+	players[PL_LEFT] = new Slayer(new Vector2D(0, cv.height / 2 - settings.slayer.y / 2), settings.slayer.start_speed, settings.slayer.color, 0);
+	players[PL_RIGHT] = new Slayer(new Vector2D(cv.width - settings.slayer.x, cv.height / 2 - settings.slayer.y / 2), settings.slayer.start_speed, settings.slayer.color, 0);
 }
 
 function InitBall() {
 	ball = null;
-	ball = new Ball(new Vector2D(cv.width / 2, cv.height / 2), 20, new Vector2D(settings.ball.start_speed.x, settings.ball.start_speed.y), settings.ball.color);
+    var start_speed_x = 0;
+    var start_speed_y = 0;
+    while(start_speed_x > -80 && start_speed_x < 80) {
+        start_speed_x = CalcRandomNumber(-settings.ball.start_speed.x, settings.ball.start_speed.x);
+    }
+    while(start_speed_y > -80 && start_speed_y < 80) {
+        start_speed_y = CalcRandomNumber(-settings.ball.start_speed.y, settings.ball.start_speed.y);
+    }
+	ball = new Ball(new Vector2D(cv.width / 2, cv.height / 2), 20, new Vector2D(start_speed_x, start_speed_y), settings.ball.color);
 }
 
 function InitNewRound() {
 	settings.paused = true;
 	UpdateScoreText();
-    ResetPlayersSpeed();
+    ResetPlayersMovement();
 	InitBall();
 	settings.text.start_game = new Text("Press Space to Start", cv.width / 2 - 100, cv.height / 2 + 4, "24px", "Calibri", "black");
 }
