@@ -1,5 +1,6 @@
-function Slayer(vect, color, score) {
+function Slayer(vect, speed, color, score) {
 	this.vect = vect;
+    this.speed = speed;
 	this.color = color;
 	this.score = score;
 }

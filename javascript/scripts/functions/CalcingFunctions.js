@@ -1,18 +1,19 @@
 function CalcMove(players, ball) {
 	if(settings.controls.pl_right.up.pressed && players[PL_RIGHT].vect.y < cv.height - settings.slayer.y) {
-		players[PL_RIGHT].vect.y += settings.slayer.movespeed;
+        players[PL_RIGHT].vect.y += players[PL_RIGHT].speed;
 	}
 	if(settings.controls.pl_right.down.pressed && players[PL_RIGHT].vect.y > 0) {
-		players[PL_RIGHT].vect.y -= settings.slayer.movespeed;
+        players[PL_RIGHT].vect.y -= players[PL_RIGHT].speed;
 	}
 	if(settings.controls.pl_left.up.pressed && players[PL_LEFT].vect.y < cv.height - settings.slayer.y) {
-		players[PL_LEFT].vect.y += settings.slayer.movespeed;
+        players[PL_LEFT].vect.y += players[PL_LEFT].speed;
 	}
 	if(settings.controls.pl_left.down.pressed && players[PL_LEFT].vect.y > 0) {
-		players[PL_LEFT].vect.y -= settings.slayer.movespeed;
+        players[PL_LEFT].vect.y -= players[PL_LEFT].speed;
 	}
 	CalcPlayerCollision();
 	CalcWallCollision();
+    IncreasePlayerSpeed();
 	IncreaseBallSpeed();
 	ball.vect = VectorAddition(ball.vect, ball.speed);
 }
@@ -91,4 +92,9 @@ function IncreaseBallSpeed() {
 			ball.speed.y = settings.ball.max_speed.y * (ball.speed.y / Math.abs(ball.speed.y));
 		}
 	}
+}
+
+function IncreasePlayerSpeed() {
+    players[PL_RIGHT].speed *= settings.slayer.increase_speed;
+    players[PL_LEFT].speed *= settings.slayer.increase_speed;
 }
