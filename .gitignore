@@ -1,16 +1,2 @@
-# Editor Files
-
-*.sw?
+*.sw*
 *~
-
-# Templatescache and Cache Files
-
-*.file.*.tpl.php
-
-# Database Files
-
-*.db
-
-# Log Files
-
-log/*
